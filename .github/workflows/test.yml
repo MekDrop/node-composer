@@ -20,16 +20,16 @@ jobs:
           - windows-latest
           - macOS-latest
         php-versions:
-          - 5.6
-          - 7.0
-          - 7.1
-          - 7.2
-          - 7.3
+#          - 5.6
+#          - 7.0
+#          - 7.1
+#          - 7.2
+#          - 7.3
           - 7.4
         composer:
           - 1
           - 2
-    name: PHP ${{ matrix.php-versions }} with composer ${{ matrix.composer }} test on ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php-versions }}; Composer v${{ matrix.composer }}; ${{ matrix.operating-system }}
     steps:
       - name: Checkout
         uses: actions/checkout@master
@@ -42,5 +42,45 @@ jobs:
           tools: composer:v${{ matrix.composer }}
       - name: Check PHP Version
         run: php -v
-      - name: Simply package install (as not required; standalone)
+      - name: Test simply package install (as not required; standalone)
         run: composer install --no-progress --no-dev --prefer-dist --optimize-autoloader
+      - name: Clearing simply package install data (vendor/)
+        uses: JesseTG/rm@v1.0.2
+        with:
+          path: vendor/
+      - name: Clearing simply package install data (composer.lock)
+        uses: JesseTG/rm@v1.0.2
+        with:
+          path: composer.lock
+      - name: Creating test_app path for dummy project...
+        run: mkdir test_app
+      - name: Creating test_app/composer.json...
+        uses: DamianReeves/write-file-action
+        with:
+          path: test_app/composer.json
+          write-mode: overwrite
+          contents: |
+            {
+              "name": "dummy/dummy",
+              "description": "Dummy project to test if configuration works",
+              "require": {
+                "mariusbuescher/node-composer": "@dev"
+              },
+              "repositories": [
+                {
+                  "type": "path",
+                  "url": "../"
+                }
+              ],
+              "extra": {
+                "mariusbuescher": {
+                  "node-composer": {
+                    "node-version": "4.8.3",
+                    "yarn-version": "0.22.0"
+                  }
+                }
+              }
+            }
+      - name: Trying to install test_app...
+        run: composer install --no-progress --no-dev --prefer-dist --optimize-autoloader
+        path: test_app
