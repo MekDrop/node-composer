@@ -112,7 +112,10 @@ class NodeInstaller implements InstallerInterface
 
         $this->unpackExecutable($fileName, $targetPath);
 
-        $this->linkExecutables($targetPath, $this->context->getBinDir());
+        $realNodeInstalledPath = is_dir($targetPath . DIRECTORY_SEPARATOR . basename($targetPath)) ?
+            $targetPath . DIRECTORY_SEPARATOR . basename($targetPath) :
+            $targetPath;
+        $this->linkExecutables($realNodeInstalledPath, $this->context->getBinDir());
     }
 
     /**
