@@ -83,4 +83,4 @@ jobs:
             }
       - name: Trying to install test_app...
         run: composer install --no-progress --no-dev --prefer-dist --optimize-autoloader
-        path: test_app
+        working-directory: test_app
