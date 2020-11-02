@@ -47,14 +47,6 @@ jobs:
       - name: Test simply package install (as not required; standalone)
         run: composer install --no-progress --no-dev --prefer-dist --optimize-autoloader
         working-directory: main
-      - name: Clearing simply package install data (vendor/)
-        uses: JesseTG/rm@v1.0.2
-        with:
-          path: main/vendor/
-      - name: Clearing simply package install data (main/composer.lock)
-        uses: JesseTG/rm@v1.0.2
-        with:
-          path: main/composer.lock
       - name: Creating test_app path for dummy project...
         run: mkdir test_app
       - name: Creating test_app/composer.json...
@@ -82,8 +74,29 @@ jobs:
                     "yarn-version": "0.22.0"
                   }
                 }
+              },
+              "config": {
+                "optimize-autoloader": true,
+                "sort-packages": true,
+                "bin-dir": "bin"
               }
             }
       - name: Trying to install test_app...
         run: composer install --no-progress --no-dev --prefer-dist --optimize-autoloader
         working-directory: test_app
+      - name: Test if installed node is working... (Windows)
+        run: node --version
+        working-directory: .\test_app\bin
+        if: matrix.operating-system == 'windows-latest'
+      - name: Test if installed node is working... (Not Windows)
+        run: node --version
+        working-directory: ./test_app/bin
+        if: matrix.operating-system != 'windows-latest'
+      - name: Test if installed yarn is working... (Windows)
+        run: yarn --version
+        working-directory: .\test_app\bin
+        if: matrix.operating-system == 'windows-latest'
+      - name: Test if installed yarn is working... (Not Windows)
+        run: yarn --version
+        working-directory: ./test_app/bin
+        if: matrix.operating-system != 'windows-latest'
