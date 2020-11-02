@@ -41,7 +41,7 @@ class YarnInstaller implements InstallerInterface
     {
         if (!is_string($version)) {
             throw new \InvalidArgumentException(
-                sprintf('Version must be a string, %s given'), gettype($version)
+                sprintf('Version must be a string, %s given', gettype($version))
             );
         }
 
