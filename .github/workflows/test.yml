@@ -31,8 +31,6 @@ jobs:
           - 2
     name: PHP ${{ matrix.php-versions }}; Composer v${{ matrix.composer }}; ${{ matrix.operating-system }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
       - name: Setup PHP
         uses: shivammathur/setup-php@master
         with:
@@ -42,16 +40,21 @@ jobs:
           tools: composer:v${{ matrix.composer }}
       - name: Check PHP Version
         run: php -v
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          path: main
       - name: Test simply package install (as not required; standalone)
         run: composer install --no-progress --no-dev --prefer-dist --optimize-autoloader
+        working-directory: main
       - name: Clearing simply package install data (vendor/)
         uses: JesseTG/rm@v1.0.2
         with:
-          path: vendor/
-      - name: Clearing simply package install data (composer.lock)
+          path: main/vendor/
+      - name: Clearing simply package install data (main/composer.lock)
         uses: JesseTG/rm@v1.0.2
         with:
-          path: composer.lock
+          path: main/composer.lock
       - name: Creating test_app path for dummy project...
         run: mkdir test_app
       - name: Creating test_app/composer.json...
@@ -69,7 +72,7 @@ jobs:
               "repositories": [
                 {
                   "type": "path",
-                  "url": "../"
+                  "url": "../main/"
                 }
               ],
               "extra": {
