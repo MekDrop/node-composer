@@ -55,7 +55,7 @@ jobs:
       - name: Creating test_app path for dummy project...
         run: mkdir test_app
       - name: Creating test_app/composer.json...
-        uses: DamianReeves/write-file-action
+        uses: DamianReeves/write-file-action@v1.0
         with:
           path: test_app/composer.json
           write-mode: overwrite
