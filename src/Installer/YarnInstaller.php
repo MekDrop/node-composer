@@ -3,6 +3,7 @@
 namespace MariusBuescher\NodeComposer\Installer;
 
 use Composer\IO\IOInterface;
+use MariusBuescher\NodeComposer\BinLinker;
 use MariusBuescher\NodeComposer\InstallerInterface;
 use MariusBuescher\NodeComposer\NodeContext;
 use Symfony\Component\Process\Process;
@@ -85,20 +86,18 @@ class YarnInstaller implements InstallerInterface
         $yarnPath = realpath($sourceDir . DIRECTORY_SEPARATOR . 'yarn');
         $yarnLink = $targetDir . DIRECTORY_SEPARATOR . 'yarn';
 
-        if (realpath($yarnLink)) {
-            unlink($yarnLink);
-        }
-
-        symlink($yarnPath, $yarnLink);
+        $fs = new BinLinker(
+            $this->context->getBinDir(),
+            $this->context->getOsType()
+        );
+        $fs->unlinkBin($yarnLink);
+        $fs->linkBin($yarnPath, $yarnLink);
 
         $yarnpkgPath = realpath($sourceDir . DIRECTORY_SEPARATOR . 'yarnpkg');
         $yarnpkgLink = $targetDir . DIRECTORY_SEPARATOR . 'yarnpkg';
 
-        if (realpath($yarnpkgLink)) {
-            unlink($yarnpkgLink);
-        }
-
-        symlink($yarnpkgPath, $yarnpkgLink);
+        $fs->unlinkBin($yarnpkgLink);
+        $fs->linkBin($yarnpkgPath, $yarnpkgLink);
     }
 
     /**
