@@ -50,7 +50,13 @@ class YarnInstaller implements InstallerInterface
             'npm install --global yarn@' . $version,
             $this->context->getBinDir()
         );
-        $process->run();
+        $process->run(function ($type, $buffer) {
+            if (Process::ERR === $type) {
+                $this->io->writeError($buffer, true, IOInterface::DEBUG);
+            } else {
+                $this->io->write($buffer, true, IOInterface::DEBUG);
+            }
+        });
 
         if (!$process->isSuccessful()) {
             throw new \RuntimeException('Could not install yarn');
