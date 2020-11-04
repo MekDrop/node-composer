@@ -92,7 +92,9 @@ class YarnInstaller implements InstallerInterface
      */
     private function linkExecutables($sourceDir, $targetDir)
     {
-        $yarnPath = realpath($sourceDir . DIRECTORY_SEPARATOR . 'yarn');
+        $yarnPath = $this->context->getOsType() === 'win' ?
+            realpath($sourceDir . DIRECTORY_SEPARATOR . 'yarn.cmd') :
+            realpath($sourceDir . DIRECTORY_SEPARATOR . 'yarn');
         $yarnLink = $targetDir . DIRECTORY_SEPARATOR . 'yarn';
 
         $fs = new BinLinker(
@@ -102,7 +104,9 @@ class YarnInstaller implements InstallerInterface
         $fs->unlinkBin($yarnLink);
         $fs->linkBin($yarnPath, $yarnLink);
 
-        $yarnpkgPath = realpath($sourceDir . DIRECTORY_SEPARATOR . 'yarnpkg');
+        $yarnpkgPath = $this->context->getOsType() === 'win' ?
+            realpath($sourceDir . DIRECTORY_SEPARATOR . 'yarnpkg.cmd') :
+            realpath($sourceDir . DIRECTORY_SEPARATOR . 'yarnpkg');
         $yarnpkgLink = $targetDir . DIRECTORY_SEPARATOR . 'yarnpkg';
 
         $fs->unlinkBin($yarnpkgLink);

@@ -82,10 +82,11 @@ class BinLinker
 
         $binPath = str_replace('/', '\\', $binPath);
 
-        return "@ECHO OFF\r\n".
-            "setlocal DISABLEDELAYEDEXPANSION\r\n".
-            "SET EXE_PATH=%~dp0\\".trim(ProcessExecutor::escape($binPath), '"\'')."\r\n".
-            "%EXE_PATH%\\{$caller} %*\r\n";
+        return "@ECHO OFF". PHP_EOL .
+            "setlocal DISABLEDELAYEDEXPANSION". PHP_EOL .
+            "set EXE_PATH=%~dp0\\".trim(ProcessExecutor::escape($binPath), '"\'').PHP_EOL.
+            "set NODE_PATH=%EXE_PATH%\\node_modules".PHP_EOL.
+            "%EXE_PATH%\\{$caller} %*".PHP_EOL;
     }
 
     /**
