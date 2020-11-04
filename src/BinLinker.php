@@ -54,18 +54,15 @@ class BinLinker
      * @param string $from Path from where to create symlink
      * @param string $to Path to where create symlink
      */
-    public function linkBin($from, $to) {
-        try {
+    public function linkBin($from, $to)
+    {
+        if ($this->osType === 'win') {
+            $this->filesystem->dumpFile(
+                $to . '.bat',
+                $this->generateBatchCode($from)
+            );
+        } else {
             $this->filesystem->symlink($from, $to);
-        } catch (IOException $exception) {
-            if ($this->osType === 'win') {
-                $this->filesystem->dumpFile(
-                    $to . '.bat',
-                    $this->generateBatchCode($from, $to)
-                );
-            } else {
-                throw $exception;
-            }
         }
     }
 
@@ -73,20 +70,17 @@ class BinLinker
      * Generates batch code
      *
      * @param string $from Path from where to create symlink
-     * @param string $to Path to where create symlink
      *
      * @return string
      */
-    protected function generateBatchCode($from, $to)
+    protected function generateBatchCode($from)
     {
         $binPath = dirname(
             $this->filesystem->makePathRelative($from, $this->vendorBinDir)
         );
         $caller = basename($from);
 
-        if ($this->osType === 'win') {
-            $binPath = str_replace('/', '\\', $binPath);
-        }
+        $binPath = str_replace('/', '\\', $binPath);
 
         return "@ECHO OFF\r\n".
             "setlocal DISABLEDELAYEDEXPANSION\r\n".
