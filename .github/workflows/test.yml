@@ -35,8 +35,8 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: curl, json, mbstring, pcre, session
-          ini-values: post_max_size=256M
+          extensions: curl, json, mbstring, pcre
+          ini-values: memory_limit=512M
           tools: composer:v${{ matrix.composer }}
       - name: Check PHP Version
         run: php -v
