@@ -85,9 +85,7 @@ class BinLinker
         return "@ECHO OFF\r\n".
             "setlocal DISABLEDELAYEDEXPANSION\r\n".
             "SET EXE_PATH=%~dp0\\".trim(ProcessExecutor::escape($binPath), '"\'')."\r\n".
-            "pushd %EXE_PATH%\r\n".
-            "{$caller} %*\r\n".
-            "popd\r\n";
+            "%EXE_PATH%\\{$caller} %*\r\n";
     }
 
     /**
