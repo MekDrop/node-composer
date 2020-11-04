@@ -73,9 +73,7 @@ class YarnInstaller implements InstallerInterface
 
     public function isInstalled()
     {
-        $nodeExecutable = $this->context->getBinDir() . DIRECTORY_SEPARATOR . 'yarn';
-
-        $process = new Process("$nodeExecutable --version");
+        $process = new Process("yarn --version", $this->context->getBinDir());
         $process->setIdleTimeout(null);
         $process->setTimeout(null);
         $process->run();
