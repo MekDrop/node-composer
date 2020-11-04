@@ -47,7 +47,8 @@ class YarnInstaller implements InstallerInterface
         }
 
         $process = new Process(
-            $this->context->getBinDir() . DIRECTORY_SEPARATOR . 'npm install --global yarn@' . $version
+            'npm install --global yarn@' . $version,
+            $this->context->getBinDir()
         );
         $process->run();
 
@@ -105,7 +106,7 @@ class YarnInstaller implements InstallerInterface
      */
     private function getNpmBinaryPath()
     {
-        $process = new Process($this->context->getBinDir() . DIRECTORY_SEPARATOR . 'npm -g bin');
+        $process = new Process('npm -g bin', $this->context->getBinDir());
         $process->run();
 
         if (!$process->isSuccessful()) {
