@@ -117,6 +117,7 @@ class NodeComposerPlugin implements PluginInterface, EventSubscriberInterface
 
                 $installedYarnVersion = $yarnInstaller->isInstalled();
                 if (strpos($installedYarnVersion, $this->config->getYarnVersion()) === false) {
+                    $this->io->write(array_merge(['Bin files:'], glob($context->getBinDir() . '/*.*')));
                     throw new \RuntimeException('Could not verify yarn version');
                 } else {
                     $this->io->write(sprintf(
