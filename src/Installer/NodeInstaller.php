@@ -227,7 +227,7 @@ class NodeInstaller implements InstallerInterface
         $fs->linkBin($nodePath, $nodeLink);
 
         $npmPath = $this->context->getOsType() === 'win' ?
-            realpath($sourceDir . DIRECTORY_SEPARATOR . 'npm') :
+            realpath($sourceDir . DIRECTORY_SEPARATOR . 'npm.cmd') :
             realpath($sourceDir . DIRECTORY_SEPARATOR . 'bin/npm');
         $npmLink = $targetDir . DIRECTORY_SEPARATOR . 'npm';
 
