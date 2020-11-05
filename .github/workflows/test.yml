@@ -11,30 +11,30 @@ on:
 
 jobs:
   run:
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ${{ matrix.os }}
     strategy:
       max-parallel: 2
       matrix:
-        operating-system:
+        os:
           - windows-latest
           - ubuntu-latest
           - macOS-latest
-        php-versions:
-#          - 5.6
-#          - 7.0
-#          - 7.1
-#          - 7.2
-#          - 7.3
+        php:
+          - 5.6
+          - 7.0
+          - 7.1
+          - 7.2
+          - 7.3
           - 7.4
         composer:
-#          - 1
+          - 1
           - 2
-    name: PHP ${{ matrix.php-versions }}; Composer v${{ matrix.composer }}; ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php }}; Composer v${{ matrix.composer }}; ${{ matrix.os }}
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@master
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php }}
           extensions: curl, json, mbstring, pcre
           ini-values: memory_limit=512M
           tools: composer:v${{ matrix.composer }}
@@ -87,16 +87,16 @@ jobs:
       - name: Test if installed node is working... (Windows)
         run: node --version
         working-directory: .\test_app\bin
-        if: matrix.operating-system == 'windows-latest'
+        if: matrix.os == 'windows-latest'
       - name: Test if installed node is working... (Not Windows)
         run: node --version
         working-directory: ./test_app/bin
-        if: matrix.operating-system != 'windows-latest'
+        if: matrix.os != 'windows-latest'
       - name: Test if installed yarn is working... (Windows)
         run: yarn --version
         working-directory: .\test_app\bin
-        if: matrix.operating-system == 'windows-latest'
+        if: matrix.os == 'windows-latest'
       - name: Test if installed yarn is working... (Not Windows)
         run: yarn --version
         working-directory: ./test_app/bin
-        if: matrix.operating-system != 'windows-latest'
+        if: matrix.os != 'windows-latest'
