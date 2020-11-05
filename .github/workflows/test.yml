@@ -15,6 +15,9 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
+        composer:
+          - 2
+          - 1
         os:
           - windows-latest
           - ubuntu-latest
@@ -26,9 +29,6 @@ jobs:
           - 7.2
           - 7.3
           - 7.4
-        composer:
-          - 1
-          - 2
     name: PHP ${{ matrix.php }}; Composer v${{ matrix.composer }}; ${{ matrix.os }}
     steps:
       - name: Setup PHP
