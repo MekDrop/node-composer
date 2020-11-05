@@ -65,6 +65,7 @@ class YarnInstaller implements InstallerInterface
         }
 
         $sourceDir = $this->getNpmBinaryPath();
+        $this->io->write('NPM found at: ' . $sourceDir, true, IOInterface::VERBOSE);
 
         $this->linkExecutables($sourceDir, $this->context->getBinDir());
 
